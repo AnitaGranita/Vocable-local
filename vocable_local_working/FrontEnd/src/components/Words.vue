@@ -1,0 +1,60 @@
+<script>
+export const words = [
+  { word: "mela", definition: "Una frutta rotonda con pelle rossa o verde e un interno bianco." },
+  { word: "aereo", definition: "Un veicolo aereo motorizzato con ali fisse e un peso maggiore di quello dell'aria che sposta." },
+  { word: "uva", definition: "Una piccola frutta rotonda, viola o verde, che cresce a grappoli." },
+  { word: "nuvola", definition: "Una massa visibile di vapore acqueo condensato che galleggia nell'atmosfera." },
+  { word: "coltello", definition: "Uno strumento con una lama usato per tagliare." },
+  { word: "cavallo", definition: "Un grande mammifero domestico usato per cavalcare e trasportare carichi." },
+  { word: "orologio", definition: "Un dispositivo per misurare e indicare il tempo." },
+  { word: "topo", definition: "Un piccolo roditore che ha tipicamente un muso appuntito e una lunga coda." },
+  { word: "cuore", definition: "L'organo che pompa il sangue attraverso il sistema circolatorio negli esseri umani e in altri animali." },
+  { word: "tavolo", definition: "Un pezzo di arredamento con una superficie piana e uno o più piedi, che fornisce una superficie livellata per mangiare, lavorare o appoggiare oggetti." },
+  { word: "treno", definition: "Una serie di veicoli connessi che viaggiano su binari." },
+  { word: "sedia", definition: "Un sedile con uno schienale, tipicamente con quattro gambe." },
+  { word: "spiaggia", definition: "Una riva sabbiosa o ghiaiosa, specialmente vicino all'oceano." },
+  { word: "sorriso", definition: "Un'espressione soddisfatta, gentile o divertita, tipicamente con gli angoli della bocca sollevati." },
+  { word: "luce", definition: "L'agente naturale che stimola la vista e rende le cose visibili." },
+  { word: "fiamma", definition: "La parte visibile e gassosa di un incendio." },
+  { word: "pietra", definition: "Un piccolo pezzo di roccia." },
+  { word: "acqua", definition: "Un liquido chiaro, incolore, inodore e insapore, essenziale per la maggior parte della vita vegetale e animale." },
+  { word: "sette", definition: "Il numero 7." },
+  { word: "terra", definition: "Il pianeta su cui viviamo; il mondo." },
+  { word: "fiume", definition: "Un grande flusso naturale di acqua che scorre in un canale verso il mare, un lago o un altro corso d'acqua." },
+  { word: "pianoforte", definition: "Un grande strumento musicale a tastiera con una cassa di legno che racchiude una tavola armonica e corde metalliche." },
+  { word: "erba", definition: "Vegetazione composta tipicamente da piante corte con foglie lunghe e strette, che cresce spontaneamente o coltivata su prati e pascoli." },
+  { word: "camicia", definition: "Un indumento per la parte superiore del corpo fatto di cotone o un tessuto simile, con un colletto e maniche, e con bottoni sul davanti." },
+  { word: "pane", definition: "Un alimento comune fatto di farina, acqua e solitamente lievito." },
+  { word: "corona", definition: "Un copricapo ornamentale circolare indossato da un monarca come simbolo di autorità." },
+  { word: "camion", definition: "Un grande veicolo a motore pesante utilizzato per trasportare merci, materiali o truppe." },
+  { word: "caramella", definition: "Un alimento dolce fatto con zucchero o altri dolcificanti, tipicamente formato in piccoli pezzi." },
+  { word: "orologio", definition: "Un dispositivo per misurare e indicare il tempo, tipicamente tramite lancette che si muovono su un quadrante." },
+  { word: "pesca", definition: "Una frutta rotonda e succosa con pelle giallo-rosa pelosa e un grande nocciolo interno." },
+  { word: "casa", definition: "Un edificio per abitazioni umane, specialmente quello abitato da una famiglia o un piccolo gruppo di persone." },
+  { word: "fumo", definition: "Il vapore e i gas visibili prodotti da una sostanza in combustione." },
+  { word: "pecora", definition: "Un animale ruminante domestico con un folto pelo lanoso." },
+  { word: "tempesta", definition: "Una perturbazione violenta dell'atmosfera con forti venti e solitamente pioggia, tuoni, fulmini o neve." },
+  { word: "globo", definition: "Una rappresentazione sferica della terra o dei cieli." },
+  { word: "camion", definition: "Un grande veicolo a motore progettato per trasportare carichi." },
+  { word: "pane", definition: "Un alimento comune fatto di farina, acqua e solitamente lievito o altro agente lievitante, mescolati e cotti." },
+  { word: "gonna", definition: "Un indumento fissato attorno alla vita e appeso intorno alle gambe, indossato da donne e ragazze." },
+  { word: "fiore", definition: "Un fiore, specialmente uno coltivato per la sua bellezza." },
+  { word: "tramonto", definition: "Il momento della sera quando il sole scompare sotto l'orizzonte." },
+  { word: "oceano", definition: "Un grande corpo di acqua salata che copre la maggior parte della superficie terrestre." },
+  { word: "valle", definition: "Un'area bassa di terra tra colline o montagne, tipicamente con un fiume o un ruscello che la attraversa." },
+  { word: "foresta", definition: "Una grande area coperta principalmente di alberi e sottobosco." },
+  { word: "ponte", definition: "Una struttura che attraversa un fiume, una strada o un altro ostacolo." },
+  { word: "fiore", definition: "La parte riproduttiva di una pianta, composta da organi riproduttivi tipicamente circondati da un corolla colorata (petali) e un calice verde (sepali)." },
+  { word: "deserto", definition: "Un'area di paesaggio arido dove si verifica poca precipitazione e, di conseguenza, le condizioni di vita sono ostili per la vita vegetale e animale." },
+  { word: "coniglio", definition: "Un piccolo mammifero che scava tane con orecchie lunghe, zampe posteriori lunghe e una coda corta." },
+  { word: "arancia", definition: "Una frutta rotonda e succosa con una buccia dura di colore rosso-giallo." },
+  { word: "aquila", definition: "Un grande uccello rapace con un becco massiccio e lunghe ali larghe, rinomato per la sua vista acuta e il suo volo potente." },
+  { word: "inverno", definition: "La stagione più fredda dell'anno, nell'emisfero nord da dicembre a febbraio e nell'emisfero sud da giugno ad agosto." }
+]
+;
+
+export const getRandomWord = () => {
+  const randomIndex = Math.floor(Math.random() * words.length);
+  return words[randomIndex];
+}
+</script>
