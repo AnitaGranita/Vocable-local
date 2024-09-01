@@ -7,9 +7,9 @@ const swaggerOptions = {
   swaggerDefinition: {
     openapi: '3.0.0',
     info: {
-      title: 'API Documentazione',
+      title: 'Vocable API',
       version: '1.0.0',
-      description: 'Documentazione delle API per la tua applicazione',
+      description: 'Documentazione delle API per l\'applicazione Vocable del Gruppo G48',
     },
     servers: [
       {
@@ -29,6 +29,16 @@ const swaggerOptions = {
     security: [
       {
         BearerAuth: [],
+      },
+    ],
+    tags: [
+      {
+        name: 'Utente',
+        description: 'Operazioni relative agli utenti',
+      },
+      {
+        name: 'Statistiche',
+        description: 'Operazioni relative alle statistiche degli utenti',
       },
     ],
   },

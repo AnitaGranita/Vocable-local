@@ -11,6 +11,8 @@ const router = express.Router();
  *   post:
  *     summary: Crea un nuovo utente
  *     description: Crea un nuovo utente nel sistema con le informazioni fornite.
+ *     tags:
+ *       - Utente
  *     requestBody:
  *       required: true
  *       content:
@@ -63,6 +65,8 @@ router.route('/utente/create').post(utenteController.createUtenteControllerFn);
  *   post:
  *     summary: Login dell'utente
  *     description: Effettua il login dell'utente e restituisce un token JWT se le credenziali sono corrette.
+ *     tags:
+ *       - Utente
  *     requestBody:
  *       required: true
  *       content:
@@ -118,6 +122,8 @@ router.route('/utente/login').post(utenteController.loginUtenteControllerFn);
  *   post:
  *     summary: Crea statistiche per un utente
  *     description: Aggiunge nuove statistiche per un utente esistente. L'utente deve essere autenticato.
+ *     tags:
+ *       - Statistiche
  *     requestBody:
  *       required: true
  *       content:
@@ -231,6 +237,8 @@ router.route('/utente/createstats').post(authenticateToken, utentestatsControlle
  *   get:
  *     summary: Recupera le informazioni dell'utente autenticato
  *     description: Restituisce i dettagli dell'utente autenticato utilizzando il token JWT.
+ *     tags:
+ *       - Utente
  *     security:
  *       - BearerAuth: []
  *     responses:
@@ -298,6 +306,8 @@ router.route('/utente/me').get(authenticateToken, utenteController.meUtenteContr
  *   post:
  *     summary: Logout dell'utente
  *     description: Disconnette l'utente e invalida il token JWT. Il token deve essere valido.
+ *     tags:
+ *       - Utente
  *     security:
  *       - BearerAuth: []
  *     responses:
@@ -336,6 +346,8 @@ router.route('/utente/logout').post(authenticateToken, utenteController.logoutUt
  *   get:
  *     summary: Recupera le statistiche dell'utente
  *     description: Restituisce le statistiche per l'utente autenticato.
+ *     tags:
+ *       - Statistiche
  *     security:
  *       - BearerAuth: []
  *     responses:
@@ -395,6 +407,8 @@ router.route('/utente/get-stats').get(authenticateToken, utentestatsController.s
  *   post:
  *     summary: Aggiorna le statistiche dell'utente
  *     description: Modifica le statistiche esistenti per l'utente autenticato.
+ *     tags:
+ *       - Statistiche
  *     security:
  *       - BearerAuth: []
  *     requestBody:
