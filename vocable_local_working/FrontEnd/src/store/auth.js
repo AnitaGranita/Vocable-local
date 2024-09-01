@@ -62,7 +62,7 @@ export default {
 
         async signOut({ commit }) {
             try {
-                await axios.post('/api/utente/logout');
+                await axios.post('https://vocable-g48-production-a10a.up.railway.app/api/utente/logout');
             } catch (error) {
                 console.error('Logout failed:', error);
             }

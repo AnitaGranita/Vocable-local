@@ -1,32 +1,29 @@
 var utentestatsServices = require("./utentestatsServices");
 var utenteService = require("./utenteServices");
 
-var createUtentestatsControllerFn = async (req, res) => //request, response
-{
-    try
-    {
+var createUtentestatsControllerFn = async (req, res) => {
+    try {
         console.log("\nregistrationstats");
         console.log(req.body);
         var status = await utentestatsServices.createUtentestatsDBService(req.body);
         console.log(status);
 
         if (status) { //restituisce un messaggio se ha creato l'utente o se non è riuscito
-            res.send({ "status": true, "message": "Utentestats creato con successo" }); 
+            res.send({ "status": true, "message": "Utentestats creato con successo" });
         }
-        else{
-            res.send({ "status": false, "message": "Errore: Impossibile creare l'utentestats"})
+        else {
+            res.send({ "status": false, "message": "Errore: Impossibile creare l'utentestats" })
         }
     }
-    catch(err)
-    {
-        console.log(err); //logga in caso di errore
+    catch (err) {
+        console.log(err);
     }
 }
 
 var statGetterControllerFn = async (req, res) => {
     try {
         const stats = await utentestatsServices.findStatsByEmail(req.user.email);
-        
+
         if (!stats) {
             return res.status(404).json({ msg: 'Statistiche irreperibili' });
         }
@@ -60,28 +57,16 @@ var statGetterControllerFn = async (req, res) => {
 var updateUtentestatsControllerFn = async (req, res) => {
     const { won, attempts } = req.body;
     try {
-        const stats = await utentestatsServices.findStatsByEmail(req.user.email);
+        const result = await utentestatsServices.updateUtentestatsDBService(req.user.email, won, attempts);
 
-        if (!stats) {
-            return res.status(404).json({ msg: 'Statistiche irreperibili' });
+        if (result.status) {
+            res.json({ status: true, message: result.message });
+        } else {
+            res.status(404).json({ status: false, message: result.message });
         }
-        console.log('before')
-        console.log(stats)
-        stats.totalgames += 1;
-        stats.gameswon += won ? 1 : 0;
-        stats.gameslost += won ? 0 : 1;
-        stats[`won${attempts}`] += won ? 1 : 0;
-
-        await stats.save();
-        console.log('after')
-        console.log(stats)
-
-        res.json({ status: true, message: 'Statistiche aggiornate con successo' });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ msg: 'Errore del server' });
+        res.status(500).json({ status: false, message: 'Errore del server' });
     }
 };
-
-
 module.exports = { createUtentestatsControllerFn, statGetterControllerFn, updateUtentestatsControllerFn };

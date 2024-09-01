@@ -1,28 +1,27 @@
 <template>
   <div class="wrapper">
-    <v-sheet>
-      <v-card class="mx-auto px-6 py-8" max-width="344">
-        <img src="/logoVuoto.png" alt="Vocable Logo" />
-        <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Vocable</span>
+    <v-sheet class="elevation-2 rounded-lg pa-8 register-container">
+      <div class="text-center">
+        <img src="/logoVuoto.png" alt="Vocable Logo" class="logo mb-4" />
+        <p class="self-center text-3xl font-semibold whitespace-nowrap dark:text-white mb-4">Registrazione</p>
+      </div>
 
-        <v-form v-model="isFormValid" lazy-validation @submit.prevent="onRegistrati">
-          <v-text-field class="required" type="nickname" :rules="nicknameRules" v-model="nickname" label="Nickname"
-            variant="underlined"></v-text-field>
-          <v-text-field class="required" type="email" :rules="emailRules" v-model="email" label="Email"
-            variant="underlined"></v-text-field>
-          <v-text-field class="required" type="password" :rules="passwordRules" v-model="password" label="Password"
-            variant="underlined"></v-text-field>
-        </v-form>
+      <v-form v-model="isFormValid" lazy-validation @submit.prevent="onRegistrati">
+        <v-text-field class="required mb-4" type="text" :rules="nicknameRules" v-model="nickname" label="Nickname"
+          variant="underlined"></v-text-field>
+        <v-text-field class="required mb-4" type="email" :rules="emailRules" v-model="email" label="Email"
+          variant="underlined"></v-text-field>
+        <v-text-field class="required mb-4" type="password" :rules="passwordRules" v-model="password" label="Password"
+          variant="underlined"></v-text-field>
 
         <!-- Alert per l'errore -->
-        <v-alert v-if="currentEmailError" type="error" dismissible>
+        <v-alert v-if="currentEmailError" type="error" dismissible class="text-center mt-2">
           {{ currentEmailError }}
         </v-alert>
 
-        <v-btn :disabled="!isFormValid" @click.native="onRegistrati" color="blue" size="large" variant="elevated" block>
-          Registrati
-        </v-btn>
-      </v-card>
+        <v-btn :disabled="!isFormValid" @click.native="onRegistrati" color="blue" size="large" variant="elevated"
+          block>Registrati</v-btn>
+      </v-form>
     </v-sheet>
   </div>
 </template>
@@ -30,7 +29,7 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 import axios from 'axios';
-import store from '@/store';
+//import store from '@/store';
 
 
 
@@ -109,22 +108,36 @@ export default {
 
 </script>
 
+
 <style scoped>
 .wrapper {
-  display: block;
+  display: flex;
   align-items: center;
-  margin: auto;
-  width: 50%;
+  justify-content: center;
+  min-height: 100vh;
   padding: 15px;
   text-align: center;
-  padding-top: 5%;
+  background: linear-gradient(185deg, rgba(34, 126, 255, 0.563), rgba(33, 33, 255, 0.93)); 
 }
 
-img {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 15%;
+.register-container {
+  width: 100%;
+  max-width: 400px;
+}
+
+.logo {
+  max-width: 100px;
   height: auto;
+  margin: 0 auto;
+}
+
+@media (max-width: 600px) {
+  .register-container {
+    padding: 24px;
+  }
+
+  .logo {
+    max-width: 80px;
+  }
 }
 </style>

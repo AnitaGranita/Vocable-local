@@ -1,5 +1,6 @@
 // Middleware per verificare il token JWT
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization'];
@@ -7,7 +8,7 @@ function authenticateToken(req, res, next) {
     
     if (token == null) return res.sendStatus(401); // Nessun token, ritorna "Unauthorized"
 
-    jwt.verify(token, 'balls' /*process.env.JWT_SECRET*/, (err, user) => {
+    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
         if (err) return res.sendStatus(403); // Token non valido, ritorna "Forbidden"
         
         req.user = user; // Salva i dati dell'utente dal token nella richiesta

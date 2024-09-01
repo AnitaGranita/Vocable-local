@@ -1,18 +1,26 @@
 <script setup>
+import { ref, onMounted } from 'vue';
 import Navbar from './components/Navbar.vue';
+import Preloader from './components/Preloader.vue'; 
+
+const isLoading = ref(true);
+onMounted(() => {
+  setTimeout(() => {
+    isLoading.value = false;
+  }, 1200);
+});
 </script>
 
-
 <template>
-  <div class=" mx-auto">
-    <Navbar />
-    <RouterView />
+  <div class="mx-auto">
+    <Preloader v-if="isLoading" />
+    <Navbar v-if="!isLoading" />
+    <RouterView v-if="!isLoading" />
   </div>
 </template>
 
-
 <style>
-body{
+body {
   font-family: Tahoma, sans-serif;
 }
 

@@ -18,6 +18,6 @@ var utenteSchema = new Schema({
     }
 
 },
-{ collection: 'utente' }); //nomina la collezione all'interno del database, i dati saranno nella collezione "utente"
+{ collection: 'utente' }); 
 
 module.exports = mongoose.model('utente', utenteSchema);

@@ -1,13 +1,13 @@
 const { response } = require("express");
 var utenteService = require("./utenteServices");
-const authenticateToken = require('./authenticateToken'); // Importa il middleware
+
 
 var createUtenteControllerFn = async (req, res) => {
     try {
         console.log("\nregistration");
         console.log(req.body);
         var status = await utenteService.createUtenteDBService(req.body);
-        console.log(status);
+        console.log("Status dal servizio:", status);
 
         if (status && status.status === true) {
             res.send({ "status": true, "message": "Utente creato con successo" });
@@ -17,7 +17,6 @@ var createUtenteControllerFn = async (req, res) => {
     } catch(err) {
         console.log(err);
         res.send({"status":false,"message":err.msg});
-        //res.send({ "status": false, "message": "Errore: Impossibile completare la richiesta" });
     }
 }
 
@@ -41,6 +40,53 @@ var loginUtenteControllerFn = async (req, res) => {
     }
 }
 
+
+const forgotPasswordControllerFn = async (req, res) => {
+    try {
+        // Log dei dati ricevuti nella richiesta
+        console.log("Richiesta di reset password ricevuta:", req.body);
+
+        // Verifica se l'email è presente nel corpo della richiesta
+        if (!req.body.email) {
+            return res.status(400).send({
+                status: false,
+                message: "Email è obbligatoria."
+            });
+        }
+
+        // Genera il token di reset utilizzando il servizio
+        const status = await utenteService.generateResetToken(req.body.email);
+
+        // Log del risultato della generazione del token
+        console.log("Risultato dalla funzione generateResetToken:", status);
+
+        if (status && status.status === true) {
+            // Token di reset generato con successo
+            console.log("Token di reset generato con successo:", status.resetToken);
+            return res.status(200).send({
+                status: true,
+                message: "Token di reset generato con successo. Controlla la tua email per il link di reset.",
+                resetToken: status.resetToken
+            });
+        } else {
+            // Errore nella generazione del token di reset
+            console.error("Errore durante la generazione del token di reset:", status.msg);
+            return res.status(400).send({
+                status: false,
+                message: status.msg || "Errore: Impossibile generare il token di reset."
+            });
+        }
+    } catch (err) {
+        // Gestione degli errori generali
+        console.error("Errore nel forgotPasswordControllerFn:", err);
+        return res.status(500).send({
+            status: false,
+            message: err.message || "Errore durante la generazione del token di reset."
+        });
+    }
+};
+
+
 var meUtenteControllerFn = async (req, res) => {
     try {
         // Trova l'utente nel database utilizzando l'email memorizzata nel token
@@ -50,7 +96,7 @@ var meUtenteControllerFn = async (req, res) => {
             return res.status(404).json({ msg: 'Utente non trovato' });
         }
 
-        // Restituisci i dettagli dell'utente
+        // Restituiscie i dettagli dell'utente
         res.json({
             email: user.email,
             nickname: user.nickname,
@@ -62,12 +108,8 @@ var meUtenteControllerFn = async (req, res) => {
 }
 
 var logoutUtenteControllerFn = async (req, res) => {
+        // Restituisce messaggi di successo o di fallimento
     try {
-        // Se hai bisogno di eseguire logiche specifiche per il logout, falle qui
-        // Ad esempio, invalidare il token nel database (se usi un sistema di blacklist)
-
-        // Per il logout lato client, il token di sessione può essere eliminato semplicemente
-        // Non è necessario fare nulla sul server se utilizzi solo JWT
         res.status(200).send({
             status: true,
             message: "Logout avvenuto con successo"
@@ -81,5 +123,24 @@ var logoutUtenteControllerFn = async (req, res) => {
     }
 }
 
+const resetPasswordControllerFn = async (req, res) => {
+    try {
+        const { token, newPassword } = req.body;
+        
+        const result = await utenteService.resetPassword(token, newPassword);
 
-module.exports = { createUtenteControllerFn, loginUtenteControllerFn, meUtenteControllerFn, logoutUtenteControllerFn  };
+        res.status(200).send(result);
+    } catch (err) {
+        console.error('Errore durante il reset della password:', err);
+        res.status(500).send({
+            status: false,
+            message: 'Errore durante il reset della password'
+        });
+    }
+};
+
+
+
+
+
+module.exports = { createUtenteControllerFn, loginUtenteControllerFn, meUtenteControllerFn, logoutUtenteControllerFn, forgotPasswordControllerFn, resetPasswordControllerFn };

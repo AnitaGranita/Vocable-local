@@ -4,7 +4,7 @@
       <div class="intro-text mx-auto">
         <p class="text-4xl font-extrabold text-black mb-4">About Us!</p>
         <p class="text-lg text-black leading-relaxed mb-8">
-          Tre menti giovani e brillanti dell'università stanno dando vita a un progetto ambizioso.
+          Tre menti giovani e (abbastanza) brillanti dell'università di Trento stanno dando vita a un progetto ambizioso.
           Uniamo le nostre competenze e la nostra creatività per trasformare idee in realtà e lasciare
           un'impronta nel mondo (circa).
         </p>
@@ -18,9 +18,8 @@
               <v-card-title class="text-2xl font-bold text-blue-800">Anita Scortegagna</v-card-title>
               <v-card-subtitle class="text-lg text-blue-600">Stratega di Progetto</v-card-subtitle>
               <v-card-text class="flex-grow-1 text-gray-800 mt-4">
-                Anita è la stratega che tiene tutto in ordine. Con una mente analitica e un occhio attento
-                ai dettagli, coordina le attività del team e assicura che ogni fase del progetto sia ben
-                pianificata e rispettata.
+                Anita è la stratega. Una team leader dall'occhio attento nonché l'unica in grado di tenerci in riga, 
+                coordina il lavoro del team e assicura che ogni fase del progetto sia pianificata e ogni scadenza rispettata.
               </v-card-text>
               <v-card-actions class="mt-auto">
                 <v-btn text color="blue" @click="mailto('anita.scortegagna@studenti.unitn.it')">Contatta Anita</v-btn>
@@ -34,8 +33,8 @@
               <v-card-subtitle class="text-lg text-blue-600">Visionario Creativo</v-card-subtitle>
               <v-card-text class="flex-grow-1 text-gray-800 mt-4">
                 Pietro è la mente creativa del nostro team, sempre pronto a pensare fuori dagli schemi.
-                Con una passione per il design e l'innovazione, trasforma idee astratte in soluzioni
-                concrete che catturano l'immaginazione.
+                Con una passione per il design e le trovate assurde, trasforma idee astratte in soluzioni
+                concrete che (qualche volta) funzionano.
               </v-card-text>
               <v-card-actions class="mt-auto">
                 <v-btn text color="blue" @click="mailto('pietro.tabladini@studenti.unitn.it')">Contatta Pietro</v-btn>
@@ -48,8 +47,8 @@
               <v-card-title class="text-2xl font-bold text-blue-800">Pietro Mazzocco</v-card-title>
               <v-card-subtitle class="text-lg text-blue-600">Esperto Tecnologico</v-card-subtitle>
               <v-card-text class="flex-grow-1 text-gray-800 mt-4">
-                Pietro è il nostro guru della tecnologia, un esperto nel coding e nella risoluzione
-                dei problemi. Con la sua esperienza nel backend e nello sviluppo software, garantisce
+                Pietro è il nostro mago della tecnologia, noto da molti (probabilmente solo da noi) come il maestro del debugging e il re dei database.
+                Con il suo aguzzo ingegno e la sua arcana saggezza, garantisce
                 che il nostro progetto funzioni senza intoppi e con la massima efficienza.
               </v-card-text>
               <v-card-actions class="mt-auto">

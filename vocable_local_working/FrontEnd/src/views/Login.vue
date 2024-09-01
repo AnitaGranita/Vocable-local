@@ -1,42 +1,44 @@
 <template>
   <div class="wrapper">
-    <v-sheet>
+    <v-sheet class="elevation-2 rounded-lg pa-8 login-container">
       <template v-slot:loader="{ isActive }">
         <v-progress-linear :active="isActive" color="deep-purple" height="4" indeterminate></v-progress-linear>
       </template>
 
-      <v-card class="mx-auto px-6 py-8" max-width="344">
-        <img src="/logoVuoto.png" alt="Vocable Logo" />
-        <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Vocable</span>
+      <div class="text-center">
+        <img src="/logoVuoto.png" alt="Vocable Logo" class="logo mb-4" />
+        <p class="self-center text-3xl font-semibold whitespace-nowrap dark:text-white mb-6">Login</p>
+      </div>
 
-        <v-form v-model="isFormValid" lazy-validation @submit.prevent="onLogin">
-          <v-text-field class="required" type="email" :rules="emailRules" v-model="email" label="Email"
-            variant="underlined"></v-text-field>
-          <v-text-field class="required" type="password" :rules="passwordRules" v-model="password" label="Password"
-            variant="underlined"></v-text-field>
-        </v-form>
+      <v-form v-model="isFormValid" lazy-validation @submit.prevent="onLogin">
+        <v-text-field class="required mb-4" type="email" :rules="emailRules" v-model="email" label="Email"
+          variant="underlined"></v-text-field>
+        <v-text-field class="required mb-4" type="password" :rules="passwordRules" v-model="password" label="Password"
+          variant="underlined"></v-text-field>
+
         <v-btn :disabled="!isFormValid" @click.native="onLogin" color="blue" size="large" variant="elevated"
           block>Login</v-btn>
-        <v-card-text> <router-link to="/forgot-password" class="justify-end d-flex text-blue">Dimenticato la
-            password?</router-link></v-card-text>
-        <span>
-          <v-card-text class="black--text ">
-            <h3 class="text-center">Non hai ancora un profilo?</h3>
-            <router-link to="/registration" id="registerButton" @click="reserve"
-              class=" font-semibold whitespace-nowrap  text-blue-700 ">Registrati</router-link>
-          </v-card-text>
-        </span>
-      </v-card>
+      </v-form>
+
+      <v-card-text class="d-flex justify-end mt-2">
+        <router-link to="/forgot-password" class="text-blue ">Dimenticato la password?</router-link>
+      </v-card-text>
+
+      <v-card-text class="black--text mt-4 text-center text-lg">
+        <p>Non hai ancora un profilo?</p>
+        <router-link to="/registration" class="font-semibold whitespace-nowrap text-blue-500">Registrati</router-link>
+      </v-card-text>
     </v-sheet>
   </div>
 </template>
 
+
 <script>
-import axios from 'axios';
+//import axios from 'axios';
 import { mapActions } from 'vuex';
 import { mapGetters } from 'vuex';
-import store from '../store'
-import { list } from 'postcss';
+//import store from '../store'
+//import { list } from 'postcss';
 
 export default {
   namespaced: true,
@@ -85,38 +87,55 @@ export default {
         if (!response.data.status) {
           alert(response.data.message)
         } else {
-          this.$router.replace({ name: 'userstats' });
+          console.log("rerouting to userstats"),
+            this.$router.replace({ name: 'userstats' });
         }
-
 
       } catch (error) {
         console.error('Errore durante il login:', error);
-        alert('Errore durante il login');
+        alert('Errore durante il login', error);
       } finally {
         this.loading = false;
+        setTimeout(() =>
+          this.$router.replace({ name: 'userstats' }), 500)
       }
+
     }
 
   }
 };
 </script>
 
+
 <style scoped>
 .wrapper {
-  display: block;
+  display: flex;
   align-items: center;
-  margin: auto;
-  width: 50%;
+  justify-content: center;
+  min-height: 100vh;
   padding: 15px;
   text-align: center;
-  padding-top: 5%;
+  background: linear-gradient(165deg, rgba(89, 158, 255, 0.264), rgb(1, 43, 255));
 }
 
-img {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 15%;
+.login-container {
+  width: 100%;
+  max-width: 400px;
+}
+
+.logo {
+  max-width: 100px;
   height: auto;
+  margin: 0 auto;
+}
+
+@media (max-width: 600px) {
+  .login-container {
+    padding: 24px;
+  }
+
+  .logo {
+    max-width: 80px;
+  }
 }
 </style>

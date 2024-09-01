@@ -1,7 +1,7 @@
 // store.js
 import { createStore } from "vuex";
 import auth from "./auth";
-import email from "../../../../vocable_local_working/FrontEnd/src/store/email";
+import email from "./email";
 
 const store = createStore({
     state: {},

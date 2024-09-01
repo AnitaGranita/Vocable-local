@@ -2,47 +2,48 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var utentestatsSchema = new Schema({
-    email :{
+    email: {
         type: String,
+        required: true,
+        unique: true
+    },
+    totalgames: {
+        type: Number,
         required: true
     },
-    totalgames :{
+    gameswon: {
         type: Number,
-        required:true
+        required: true
     },
-    gameswon :{
+    gameslost: {
         type: Number,
-        required:true
+        required: true
     },
-    gameslost :{
+    won1: {
         type: Number,
-        required:true
+        required: true
     },
-    won1 :{
+    won2: {
         type: Number,
-        required:true
+        required: true
     },
-    won2 :{
+    won3: {
         type: Number,
-        required:true
+        required: true
     },
-    won3 :{
+    won4: {
         type: Number,
-        required:true
+        required: true
     },
-    won4 :{
+    won5: {
         type: Number,
-        required:true
+        required: true
     },
-    won5 :{
+    won6: {
         type: Number,
-        required:true
-    },
-    won6 :{
-        type: Number,
-        required:true
+        required: true
     }
 },
-{collection:'utentestats'});
+    { collection: 'utentestats' });
 
-module.exports = mongoose.model('utentestats',utentestatsSchema)
+module.exports = mongoose.model('utentestats', utentestatsSchema)

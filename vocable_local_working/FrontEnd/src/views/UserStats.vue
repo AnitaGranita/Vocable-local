@@ -11,6 +11,7 @@
         :won5="user.won5 !== undefined ? user.won5 : 0" :won6="user.won6 !== undefined ? user.won6 : 0" />
     </div>
     <div class="statistics-container">
+      <p class="statistic-title">Statistiche partite:</p>
       <v-sheet class="statistics-wrapper">
         <v-card class="stat-card" rounded>
           <p class="stat-title">Partite giocate:</p>
@@ -28,8 +29,6 @@
     </div>
   </v-sheet>
 </template>
-
-
 
 <script>
 import { mapGetters } from 'vuex';
@@ -79,9 +78,9 @@ export default {
   color: #4a5568;
 }
 
-
 .chart-section {
-  margin: 10px auto;
+  margin-top: 10px;
+  margin-bottom: 0px;
 }
 
 .chart-title {
@@ -90,11 +89,25 @@ export default {
   color: #4052e0;
 }
 
+@media (max-width: 600px) {
+  .chart-title {
+    font-size: 1rem;
+  }
 
-.statistics-container {
-  margin-top: 10px;
+  .chart-section {
+    margin-top: 5px;
+  }
 }
 
+.statistic-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #364ae3;
+}
+
+.statistics-container {
+  margin-top: 0px;
+}
 
 .statistics-wrapper {
   display: flex;
@@ -103,7 +116,6 @@ export default {
   gap: 20px;
   padding: 20px;
 }
-
 
 .stat-card {
   background: #ffffff;
@@ -121,7 +133,6 @@ export default {
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
 }
 
-
 .stat-title {
   font-weight: 600;
   color: #4052e0;
@@ -131,5 +142,13 @@ export default {
 .stat-value {
   font-size: 1.5rem;
   color: #4a5568;
+}
+
+@media (max-width: 600px) {
+  .statistics-wrapper {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
 }
 </style>
