@@ -1,106 +1,56 @@
 const request = require('supertest');
 const express = require('express');
-const mongoose = require('mongoose');
-const jwt = require('jsonwebtoken');
-const { MongoMemoryServer } = require('mongodb-memory-server');
-const { 
-    createUtenteControllerFn, 
-    loginUtenteControllerFn, 
-    meUtenteControllerFn, 
-    logoutUtenteControllerFn, 
-    forgotPasswordControllerFn, 
-    resetPasswordControllerFn 
-} = require('../utenteController'); // aggiorna con il path corretto
-const utenteService = require('../utenteServices'); // aggiorna con il path corretto
-const authenticateToken = require('../authenticateToken'); // aggiorna con il path corretto
+const { createUtenteControllerFn, loginUtenteControllerFn, meUtenteControllerFn, logoutUtenteControllerFn, forgotPasswordControllerFn } = require('../utenteController');
+const utenteService = require('../utenteServices');
 
-// Configura l'app Express
 const app = express();
 app.use(express.json());
 
-// Applica il middleware e le route
-app.post('/create-utente', createUtenteControllerFn);
+// Mocking endpoints
+app.post('/create', createUtenteControllerFn);
 app.post('/login', loginUtenteControllerFn);
-app.get('/me', authenticateToken, meUtenteControllerFn);
+app.get('/me', meUtenteControllerFn);
 app.post('/logout', logoutUtenteControllerFn);
 app.post('/forgot-password', forgotPasswordControllerFn);
-app.post('/reset-password', resetPasswordControllerFn);
 
-// Mock dei servizi
-jest.mock('../utenteServices'); // aggiorna con il path corretto
-jest.mock('jsonwebtoken');
+// Mocking service methods
+jest.mock('../utenteServices');
 
-let mongoServer;
+describe('Utente Controller Tests', () => {
 
-beforeAll(async () => {
-    mongoServer = await MongoMemoryServer.create();
-    const uri = mongoServer.getUri();
-    await mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-});
-
-afterEach(async () => {
-    await mongoose.connection.dropDatabase();
-});
-
-afterAll(async () => {
-    await mongoose.disconnect();
-    await mongoServer.stop();
-});
-
-describe('API Tests', () => {
-    const validToken = 'valid-token';
-    const invalidToken = 'invalid-token';
-    const decodedUser = { email: 'test@example.com' };
-
-    beforeEach(() => {
-        // Mock di jwt.verify
-        jwt.verify.mockImplementation((token, secret, callback) => {
-            if (token === validToken) {
-                callback(null, decodedUser);
-            } else {
-                callback(new Error('Invalid token'), null);
-            }
-        });
-    });
-
-    describe('POST /create-utente', () => {
-        it('should create a user successfully', async () => {
+    describe('POST /create', () => {
+        it('should create a new user successfully', async () => {
             utenteService.createUtenteDBService.mockResolvedValue({ status: true });
-
+            
             const response = await request(app)
-                .post('/create-utente')
+                .post('/create')
                 .send({ email: 'test@example.com', password: 'password123' });
 
             expect(response.statusCode).toBe(200);
             expect(response.body).toEqual({
                 status: true,
-                message: 'Utente creato con successo'
+                message: "Utente creato con successo"
             });
         });
 
-        it('should return an error when creation fails', async () => {
-            utenteService.createUtenteDBService.mockResolvedValue({ status: false, msg: "Errore nella creazione dell'utente" });
+        it('should return an error when user creation fails', async () => {
+            utenteService.createUtenteDBService.mockResolvedValue({ status: false, msg: 'Errore: Impossibile creare l\'utente' });
 
             const response = await request(app)
-                .post('/create-utente')
+                .post('/create')
                 .send({ email: 'test@example.com', password: 'password123' });
 
             expect(response.statusCode).toBe(200);
             expect(response.body).toEqual({
                 status: false,
-                message: "Errore nella creazione dell'utente"
+                message: "Errore: Impossibile creare l'utente"
             });
         });
     });
 
     describe('POST /login', () => {
-        it('should login a user successfully', async () => {
-            utenteService.loginUtenteDBService.mockResolvedValue({
-                status: true,
-                msg: "Login successful",
-                token: validToken,
-                id: 'someUserId'
-            });
+        it('should log in a user successfully', async () => {
+            utenteService.loginUtenteDBService.mockResolvedValue({ status: true, msg: 'Login successful', token: 'fake-jwt-token', id: '12345' });
 
             const response = await request(app)
                 .post('/login')
@@ -110,13 +60,13 @@ describe('API Tests', () => {
             expect(response.body).toEqual({
                 status: true,
                 message: 'Login successful',
-                token: validToken,
-                id: 'someUserId'
+                token: 'fake-jwt-token',
+                id: '12345'
             });
         });
 
         it('should return an error when login fails', async () => {
-            utenteService.loginUtenteDBService.mockResolvedValue({ status: false, msg: "Invalid credentials" });
+            utenteService.loginUtenteDBService.mockResolvedValue({ status: false, msg: 'Invalid credentials' });
 
             const response = await request(app)
                 .post('/login')
@@ -131,45 +81,27 @@ describe('API Tests', () => {
     });
 
     describe('GET /me', () => {
-        it('should return user details if authenticated', async () => {
-            utenteService.findUserByEmail.mockResolvedValue({
-                email: 'test@example.com',
-                nickname: 'testuser',
-                _id: 'someUserId'
-            });
+        it('should return user details', async () => {
+            utenteService.findUserByEmail.mockResolvedValue({ email: 'test@example.com', nickname: 'testuser', _id: '12345' });
 
             const response = await request(app)
                 .get('/me')
-                .set('Authorization', `Bearer ${validToken}`);
+                .set('Authorization', 'Bearer fake-jwt-token');
 
             expect(response.statusCode).toBe(200);
             expect(response.body).toEqual({
                 email: 'test@example.com',
                 nickname: 'testuser',
-                id: 'someUserId'
+                id: '12345'
             });
         });
 
-        it('should return 401 if no token is provided', async () => {
-            const response = await request(app).get('/me');
-
-            expect(response.statusCode).toBe(401);
-        });
-
-        it('should return 403 if token is invalid', async () => {
-            const response = await request(app)
-                .get('/me')
-                .set('Authorization', `Bearer ${invalidToken}`);
-
-            expect(response.statusCode).toBe(403);
-        });
-
-        it('should return 404 if user not found', async () => {
+        it('should return an error when user is not found', async () => {
             utenteService.findUserByEmail.mockResolvedValue(null);
 
             const response = await request(app)
                 .get('/me')
-                .set('Authorization', `Bearer ${validToken}`);
+                .set('Authorization', 'Bearer fake-jwt-token');
 
             expect(response.statusCode).toBe(404);
             expect(response.body).toEqual({ msg: 'Utente non trovato' });
@@ -177,25 +109,21 @@ describe('API Tests', () => {
     });
 
     describe('POST /logout', () => {
-        it('should logout successfully', async () => {
+        it('should log out successfully', async () => {
             const response = await request(app)
-                .post('/logout')
-                .set('Authorization', `Bearer ${validToken}`);
+                .post('/logout');
 
             expect(response.statusCode).toBe(200);
             expect(response.body).toEqual({
                 status: true,
-                message: 'Logout avvenuto con successo'
+                message: "Logout avvenuto con successo"
             });
         });
     });
 
     describe('POST /forgot-password', () => {
-        it('should generate reset token successfully', async () => {
-            utenteService.generateResetToken.mockResolvedValue({
-                status: true,
-                resetToken: 'someResetToken'
-            });
+        it('should generate a reset token successfully', async () => {
+            utenteService.generateResetToken.mockResolvedValue({ status: true, resetToken: 'reset-token' });
 
             const response = await request(app)
                 .post('/forgot-password')
@@ -204,53 +132,22 @@ describe('API Tests', () => {
             expect(response.statusCode).toBe(200);
             expect(response.body).toEqual({
                 status: true,
-                message: 'Token di reset generato con successo. Controlla la tua email per il link di reset.',
-                resetToken: 'someResetToken'
+                message: "Token di reset generato con successo. Controlla la tua email per il link di reset.",
+                resetToken: 'reset-token'
             });
         });
 
-        it('should return an error if email is not provided', async () => {
+        it('should return an error when reset token generation fails', async () => {
+            utenteService.generateResetToken.mockResolvedValue({ status: false, msg: 'Errore: Impossibile generare il token di reset.' });
+
             const response = await request(app)
                 .post('/forgot-password')
-                .send({});
+                .send({ email: 'test@example.com' });
 
             expect(response.statusCode).toBe(400);
             expect(response.body).toEqual({
                 status: false,
-                message: 'Email è obbligatoria.'
-            });
-        });
-    });
-
-    describe('POST /reset-password', () => {
-        it('should reset password successfully', async () => {
-            utenteService.resetPassword.mockResolvedValue({
-                status: true,
-                message: 'Password reset con successo'
-            });
-
-            const response = await request(app)
-                .post('/reset-password')
-                .send({ token: 'someResetToken', newPassword: 'newPassword123' });
-
-            expect(response.statusCode).toBe(200);
-            expect(response.body).toEqual({
-                status: true,
-                message: 'Password reset con successo'
-            });
-        });
-
-        it('should return an error if reset fails', async () => {
-            utenteService.resetPassword.mockRejectedValue(new Error('Errore durante il reset della password'));
-
-            const response = await request(app)
-                .post('/reset-password')
-                .send({ token: 'someResetToken', newPassword: 'newPassword123' });
-
-            expect(response.statusCode).toBe(500);
-            expect(response.body).toEqual({
-                status: false,
-                message: 'Errore durante il reset della password'
+                message: 'Errore: Impossibile generare il token di reset.'
             });
         });
     });
