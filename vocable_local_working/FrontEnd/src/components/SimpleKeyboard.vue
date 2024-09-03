@@ -101,15 +101,15 @@ watch(
   font-family: Tahoma, sans-serif;
 }
 .simple-keyboard.hg-layout-default .hg-button.miss {
-  background: rgb(158, 158, 158) !important;
+  background: rgb(107 114 128) !important;
   color: white;
 }
 .simple-keyboard.hg-layout-default .hg-button.found {
-  background: rgb(67, 160, 71) !important;
+  background: rgb(5 122 85) !important;
   color: white;
 }
 .simple-keyboard.hg-layout-default .hg-button.hint:not(.found) {
-  background: rgb(255, 235, 59) !important;
+  background: rgb(194 120 3) !important;
   color: white;
 }
 </style>
