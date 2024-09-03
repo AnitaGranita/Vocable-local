@@ -5,7 +5,7 @@ const { createUtentestatsControllerFn, statGetterControllerFn, updateUtentestats
 const utentestatsServices = require('../utentestatsServices');
 const utenteService = require('../utenteServices');
 const { MongoMemoryServer } = require('mongodb-memory-server');
-const authenticateToken = require('../authenticateToken'); // Importa il middleware
+const authenticateToken = require('../authenticateToken');
 
 const app = express();
 app.use(express.json());
@@ -15,10 +15,10 @@ app.post('/create-stats', authenticateToken, createUtentestatsControllerFn);
 app.get('/stats', authenticateToken, statGetterControllerFn);
 app.put('/update-stats', authenticateToken, updateUtentestatsControllerFn);
 
-// Mocking service methods
+// Mocking dei services
 jest.mock('../utentestatsServices');
 jest.mock('../utenteServices');
-jest.mock('jsonwebtoken'); // Mocka anche jwt
+jest.mock('jsonwebtoken');
 
 let mongoServer;
 
@@ -68,8 +68,8 @@ describe('Utentestats Controller Tests', () => {
             expect(response.statusCode).toBe(403);
         });
 
-        it('should call the next middleware if token is valid', async () => {
-            // Mock service methods
+        it('should call the API if token is valid', async () => {
+            // Mock dei services
             utentestatsServices.findStatsByEmail.mockResolvedValue({
                 email: 'test@example.com',
                 totalgames: 10,
@@ -218,52 +218,57 @@ describe('Utentestats Controller Tests', () => {
 
     describe('PUT /update-stats', () => {
         it('should update stats successfully', async () => {
-            const mockStats = {
-                email: 'test@example.com',
-                totalgames: 10,
-                gameswon: 6,
-                gameslost: 4,
-                won1: 1,
-                won2: 2,
-                won3: 1,
-                won4: 1,
-                won5: 0,
-                won6: 1,
-                save: jest.fn().mockResolvedValue(true)
-            };
-
-            // Mock service method
-            utentestatsServices.findStatsByEmail.mockResolvedValue(mockStats);
-
+            // Mock service method to return a successful update
+            utentestatsServices.updateUtentestatsDBService.mockResolvedValue({
+                status: true,
+                message: 'Statistiche aggiornate con successo'
+            });
+    
             const response = await request(app)
                 .put('/update-stats')
                 .set('Authorization', `Bearer ${validToken}`)
                 .send({ won: true, attempts: 3 });
-
+    
             expect(response.statusCode).toBe(200);
             expect(response.body).toEqual({
                 status: true,
                 message: 'Statistiche aggiornate con successo'
             });
-
-            // Check if the stats were updated correctly
-            expect(mockStats.totalgames).toBe(11);
-            expect(mockStats.gameswon).toBe(7);
-            expect(mockStats.gameslost).toBe(4);
-            expect(mockStats.won3).toBe(2);
         });
-
-        it('should return 404 when stats are not found for update', async () => {
-            // Mock service method
-            utentestatsServices.findStatsByEmail.mockResolvedValue(null);
-
+    
+        it('should return 404 when update fails due to missing stats', async () => {
+            // Mock service method to simulate a failure due to missing stats
+            utentestatsServices.updateUtentestatsDBService.mockResolvedValue({
+                status: false,
+                message: 'Statistiche irreperibili'
+            });
+    
             const response = await request(app)
                 .put('/update-stats')
                 .set('Authorization', `Bearer ${validToken}`)
                 .send({ won: true, attempts: 3 });
-
+    
             expect(response.statusCode).toBe(404);
-            expect(response.body).toEqual({ msg: 'Statistiche irreperibili' });
+            expect(response.body).toEqual({
+                status: false,
+                message: 'Statistiche irreperibili'
+            });
+        });
+    
+        it('should return 500 when there is a server error', async () => {
+            // Mock service method to throw an error simulating a server issue
+            utentestatsServices.updateUtentestatsDBService.mockRejectedValue(new Error('Errore del server'));
+    
+            const response = await request(app)
+                .put('/update-stats')
+                .set('Authorization', `Bearer ${validToken}`)
+                .send({ won: true, attempts: 3 });
+    
+            expect(response.statusCode).toBe(500);
+            expect(response.body).toEqual({
+                status: false,
+                message: 'Errore del server'
+            });
         });
     });
-});
+});    

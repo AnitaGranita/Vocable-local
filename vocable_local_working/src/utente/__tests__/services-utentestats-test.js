@@ -1,10 +1,7 @@
-// __tests__/utentestatsService.test.js
 const mongoose = require('mongoose');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const utentestatsModel = require('../utentestatsModel');
 const utentestatsServices = require('../utentestatsServices');
-const utenteService = require('../utenteServices');
-const encryptor = require('simple-encryptor')('hqBzkw4H7Iog6561');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
@@ -106,21 +103,35 @@ describe('utentestatsServices', () => {
     };
     await utentestatsServices.createUtentestatsDBService(utentestatsDetails);
 
-    const fakeToken = jwt.sign({ email }, process.env.JWT_SECRET);
-    const req = {
-      user: { email },
-      body: { won: true, attempts: 1 }
-    };
-    const res = {
-      json: jest.fn(),
-      status: jest.fn().mockReturnThis()
-    };
+    const result = await utentestatsServices.updateUtentestatsDBService(email, true, 1);
 
-    await utentestatsServices.updateUtentestatsControllerFn(req, res);
+    expect(result.status).toBe(true);
+    expect(result.message).toBe('Statistiche aggiornate con successo');
 
     const updatedStats = await utentestatsModel.findOne({ email });
     expect(updatedStats.totalgames).toBe(utentestatsDetails.totalgames + 1);
     expect(updatedStats.gameswon).toBe(utentestatsDetails.gameswon + 1);
+    expect(updatedStats.gameslost).toBe(utentestatsDetails.gameslost);
     expect(updatedStats.won1).toBe(utentestatsDetails.won1 + 1);
+  });
+
+  test('should return error if user stats are not found for update', async () => {
+    const email = 'nonexistent@example.com';
+
+    const result = await utentestatsServices.updateUtentestatsDBService(email, true, 1);
+
+    expect(result.status).toBe(false);
+    expect(result.message).toBe('Utente non trovato');
+  });
+
+  test('should return server error if an exception is thrown', async () => {
+    jest.spyOn(utentestatsServices, 'findStatsByEmail').mockImplementationOnce(() => {
+      throw new Error('Database error');
+    });
+
+    const result = await utentestatsServices.updateUtentestatsDBService('test@example.com', true, 1);
+
+    expect(result.status).toBe(false);
+    expect(result.message).toBe('Errore del server');
   });
 });

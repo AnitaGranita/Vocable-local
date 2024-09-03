@@ -10,11 +10,9 @@ const {
     logoutUtenteControllerFn, 
     forgotPasswordControllerFn, 
     resetPasswordControllerFn 
-} = require('../utenteController'); // aggiorna con il path corretto
-const utenteService = require('../utenteServices'); // aggiorna con il path corretto
-const authenticateToken = require('../authenticateToken'); // aggiorna con il path corretto
-
-// Configura l'app Express
+} = require('../utenteController');
+const utenteService = require('../utenteServices');
+const authenticateToken = require('../authenticateToken');
 const app = express();
 app.use(express.json());
 
@@ -27,7 +25,7 @@ app.post('/forgot-password', forgotPasswordControllerFn);
 app.post('/reset-password', resetPasswordControllerFn);
 
 // Mock dei servizi
-jest.mock('../utenteServices'); // aggiorna con il path corretto
+jest.mock('../utenteServices');
 jest.mock('jsonwebtoken');
 
 let mongoServer;

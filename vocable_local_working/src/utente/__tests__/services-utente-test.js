@@ -114,7 +114,6 @@ describe('utenteService', () => {
 
     await utenteService.createUtenteDBService({ email, nickname: 'testuser', password: oldPassword });
 
-    // Modifica per riflettere che la risposta di generateResetToken non ha una proprietà 'body'
     const { resetToken } = await utenteService.generateResetToken(email);
 
     const result = await utenteService.resetPassword(resetToken, newPassword);
