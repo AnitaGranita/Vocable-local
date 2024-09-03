@@ -229,7 +229,7 @@ router.route('/utente/login').post(utenteController.loginUtenteControllerFn);
  *                   example: "Errore del server"
  */
 
-router.route('/utente/createstats').post(authenticateToken, utentestatsController.createUtentestatsControllerFn);
+router.route('/utente/createstats').post(utentestatsController.createUtentestatsControllerFn);
 
 /**
  * @swagger

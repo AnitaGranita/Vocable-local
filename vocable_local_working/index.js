@@ -9,13 +9,21 @@ const app = express();
 mongoose.set('strictQuery', false);
 
 var routes = require('./route/routes');
-
+//debug cors
+app.use((req, res, next) => {
+    console.log(`Incoming request: ${req.method} ${req.url}`);
+    console.log('Request headers:', req.headers);
+    next();
+});
 // Configurazione CORS
 app.use(cors({
     origin: 'http://localhost:5173',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
+
+app.use('/api', routes);
 
 // Serve la documentazione Swagger UI
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
@@ -42,3 +50,8 @@ mongoose.connect("mongodb://localhost:27017/utenti", {
         console.log(err, ": database utenti non connesso");
     }
 );
+
+app.use((err, req, res, next) => {
+    console.error('Errore nel server:', err);
+    res.status(500).send('Errore nel server');
+});

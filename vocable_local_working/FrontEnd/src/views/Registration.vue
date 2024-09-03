@@ -81,7 +81,7 @@ export default {
           password: this.password,
           nickname: this.nickname
         });
-
+        
         if (response.data.status) {
           await axios.post('/api/utente/createstats', {
             email: this.email,
